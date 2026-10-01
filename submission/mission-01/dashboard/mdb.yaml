@@ -1,0 +1,81 @@
+# YAMCS Mission Database - VEGA-01
+# Place this file in your YAMCS instance mdb/ folder
+
+name: VEGA-01
+systems:
+  - name: VEGA01
+    parameters:
+      - name: timestamp
+        parameterType: string
+        longDescription: "UTC timestamp of telemetry sample"
+
+      - name: mission_time_s
+        parameterType: uint32
+        defaultAlarm:
+          minInclusive: 0
+        units: s
+        longDescription: "Seconds since simulated launch"
+
+      - name: altitude_m
+        parameterType: float
+        units: m
+        longDescription: "Estimated altitude above ground"
+
+      - name: latitude_deg
+        parameterType: float
+        units: deg
+        longDescription: "WGS-84 latitude"
+
+      - name: longitude_deg
+        parameterType: float
+        units: deg
+        longDescription: "WGS-84 longitude"
+
+      - name: temperature_c
+        parameterType: float
+        units: degC
+        longDescription: "Payload internal temperature"
+
+      - name: pressure_hpa
+        parameterType: float
+        units: hPa
+        longDescription: "Atmospheric pressure"
+
+      - name: battery_v
+        parameterType: float
+        units: V
+        defaultAlarm:
+          minInclusive: 7.4
+          minExclusive: 6.8
+        longDescription: "Main 2S LiPo battery voltage"
+
+      - name: roll_deg
+        parameterType: float
+        units: deg
+        longDescription: "Roll angle"
+
+      - name: pitch_deg
+        parameterType: float
+        units: deg
+        longDescription: "Pitch angle"
+
+      - name: gps_satellites
+        parameterType: uint32
+        longDescription: "Number of GNSS satellites tracked"
+
+      - name: imu_status
+        parameterType: string
+        longDescription: "IMU health: OK or FAULT"
+
+      - name: gps_status
+        parameterType: string
+        longDescription: "GNSS fix state: LOCK, DEGRADED, or NO_FIX"
+
+      - name: radio_rssi_dbm
+        parameterType: sint32
+        units: dBm
+        longDescription: "Received signal strength indicator"
+
+      - name: system_status
+        parameterType: string
+        longDescription: "Overall system state: NOMINAL, LINK_MARGIN_LOW, BATTERY_WARN"
