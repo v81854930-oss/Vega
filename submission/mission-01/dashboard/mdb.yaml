@@ -1,6 +1,3 @@
-# YAMCS Mission Database - VEGA-01
-# Place this file in your YAMCS instance mdb/ folder
-
 name: VEGA-01
 systems:
   - name: VEGA01
