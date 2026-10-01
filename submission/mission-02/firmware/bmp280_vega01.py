@@ -21,17 +21,17 @@ import struct
 import time
 import smbus2
 
-# I2C address when SDO pin is pulled LOW
+
 BMP280_ADDR = 0x76
 
-# Register addresses (BMP280 datasheet section 4.2)
+
 REG_ID          = 0xD0
 REG_RESET       = 0xE0
 REG_STATUS      = 0xF3
 REG_CTRL_MEAS   = 0xF4
 REG_CONFIG      = 0xF5
-REG_PRESS_MSB   = 0xF7   # 0xF7..0xFC = pressure + temperature raw data
-REG_CALIB_START = 0x88   # calibration coefficients start here
+REG_PRESS_MSB   = 0xF7   
+REG_CALIB_START = 0x88   
 
 
 def read_calibration(bus):
@@ -41,9 +41,9 @@ def read_calibration(bus):
     """
     raw = bus.read_i2c_block_data(BMP280_ADDR, REG_CALIB_START, 24)
 
-    # Unpack according to Table 17 (little-endian, mix of signed/unsigned)
-    dig_T1 = struct.unpack_from("<H", bytes(raw), 0)[0]   # unsigned
-    dig_T2 = struct.unpack_from("<h", bytes(raw), 2)[0]   # signed
+  
+    dig_T1 = struct.unpack_from("<H", bytes(raw), 0)[0]   
+    dig_T2 = struct.unpack_from("<h", bytes(raw), 2)[0]  
     dig_T3 = struct.unpack_from("<h", bytes(raw), 4)[0]
 
     dig_P1 = struct.unpack_from("<H", bytes(raw), 6)[0]
@@ -72,7 +72,7 @@ def configure(bus):
     ctrl_meas = (0b001 << 5) | (0b001 << 2) | 0b11
     bus.write_byte_data(BMP280_ADDR, REG_CTRL_MEAS, ctrl_meas)
 
-    # config register: standby 0.5 ms, filter off
+  
     bus.write_byte_data(BMP280_ADDR, REG_CONFIG, 0x00)
 
 
@@ -118,7 +118,7 @@ def compensate_pressure(raw_press, t_fine, calib):
     var1 = (1.0 + var1 / 32768.0) * dig_P1
 
     if var1 == 0:
-        return 0  # avoid division by zero
+        return 0 
 
     pressure = 1048576.0 - raw_press
     pressure = (pressure - var2 / 4096.0) * 6250.0 / var1
@@ -140,7 +140,7 @@ def altitude_from_pressure(pressure_pa, sea_level_pa=101325.0):
 def main():
     bus = smbus2.SMBus(1)
 
-    # Verify chip ID (BMP280 should return 0x60, BMP180 = 0x55, BME280 = 0x60)
+   
     chip_id = bus.read_byte_data(BMP280_ADDR, REG_ID)
     if chip_id != 0x60:
         print("BMP280: NOT FOUND (chip_id = 0x{:02X}, expected 0x60)".format(chip_id))
@@ -149,7 +149,7 @@ def main():
     calib = read_calibration(bus)
     configure(bus)
 
-    # Wait for first measurement (0.5 ms standby + conversion time ~8 ms)
+   
     time.sleep(0.1)
 
     print("VEGA-01 SENSOR")
